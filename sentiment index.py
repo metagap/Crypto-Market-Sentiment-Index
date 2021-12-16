@@ -34,8 +34,12 @@ def rearrange(value,values =[]):
   values.append(float(value))
   return values
 
+def weight_volume(volume):
+    weight = 100/(1+math.exp(0.04*(volume-50)))
+    return weight
+
 def sentiment_model(close_idx,volume_idx,taker_buy_ratio_idx,Flag):
-  calc_now = 1/3*(close_idx+volume_idx+taker_buy_ratio_idx)
+  calc_now = (close_idx+weight_volume(volume_idx)+taker_buy_ratio_idx)/(2.85)
   if volume_idx < 20:
     print("Extreme low volume!")
     return Flag + (calc_now-Flag)*0.5
