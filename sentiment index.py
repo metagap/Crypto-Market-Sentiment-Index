@@ -39,18 +39,18 @@ def weight_volume(volume):
     return weight
 
 def sentiment_model(close_idx,volume_idx,taker_buy_ratio_idx,Flag):
-  calc_now = (close_idx+weight_volume(volume_idx)+taker_buy_ratio_idx)/(2.85)
-  if volume_idx < 20:
+  calc_now = (1.1*close_idx+weight_volume(volume_idx)+0.9*taker_buy_ratio_idx)/(2 + weight_volume(volume_idx)/50)
+  if volume_idx < 15:
     print("Extreme low volume!")
     return Flag + (calc_now-Flag)*0.5
-  elif volume_idx > 80:
+  elif volume_idx > 85:
     print("Extreme high volume!")
     return Flag + (calc_now-Flag)*0.95
   else:
-    return Flag + (calc_now-Flag)*0.7
+    return Flag + (calc_now-Flag)*0.8
 
 def logistic_reg(num):
-  return 100/(1+math.exp(-0.05*(num-50)))
+  return 100/(1+math.exp(-0.065*(num-50)))
 
 def on_open(ws):
     print('opened connection')
@@ -72,7 +72,7 @@ def on_message(ws, message):
       print("The close price is {}".format(close))
       print("The volume is {} eth".format(volume))
       print("The taker buy ratio is {}".format(taker_buy_ratio))
-      if len(closes) < 50:
+      if len(closes) < 60:
         closes.append(float(close))
         volumes.append(float(volume))
         taker_buy_ratios.append(float(taker_buy_ratio))
