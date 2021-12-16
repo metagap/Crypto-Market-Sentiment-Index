@@ -40,14 +40,14 @@ def weight_volume(volume):
 
 def sentiment_model(close_idx,volume_idx,taker_buy_ratio_idx,Flag):
   calc_now = (1.1*close_idx+weight_volume(volume_idx)+0.9*taker_buy_ratio_idx)/(2 + weight_volume(volume_idx)/50)
-  if volume_idx < 15:
+  if volume_idx < 5:
     print("Extreme low volume!")
     return Flag + (calc_now-Flag)*0.5
-  elif volume_idx > 85:
+  elif volume_idx > 95:
     print("Extreme high volume!")
     return Flag + (calc_now-Flag)*0.95
   else:
-    return Flag + (calc_now-Flag)*0.8
+    return Flag + (calc_now-Flag)*0.75
 
 def logistic_reg(num):
   return 100/(1+math.exp(-0.065*(num-50)))
